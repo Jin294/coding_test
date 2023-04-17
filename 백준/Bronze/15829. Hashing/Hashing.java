@@ -1,24 +1,19 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        String s = br.readLine();
-        int[] nums = new int[n];
-        for (int i = 0; i < n; i++) {
-            char x = s.charAt(i);
-            nums[i] = (char) (x - 'a') + 1;
-        }
+        BigInteger sum = new BigInteger("0");
+        char[] arr = br.readLine().toCharArray();
 
-        long answer = 0;
-        long cnt = 1L;
-        for (int i = 0; i < n; i++) {
-            answer += cnt * nums[i];
-            cnt *= 31L;
+        for (int i = 0; i < arr.length; i++) {
+            int num = arr[i] - 'a' + 1;
+            sum = sum.add(BigInteger.valueOf(num).multiply(BigInteger.valueOf(31).pow(i)));
         }
-        System.out.println(answer);
+        System.out.println(sum.remainder(BigInteger.valueOf(1_234_567_891)));
     }
 }
