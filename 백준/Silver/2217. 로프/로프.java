@@ -13,14 +13,11 @@ public class Main {
 			list.add(Integer.parseInt(br.readLine()));
 		}
 
-		Collections.sort(list);
+		Collections.sort(list, Collections.reverseOrder());
 		
 		int answer = 0;
-		while(list.size() > 0) {
-			int sum = list.get(0) * list.size();
-			answer = answer > sum ? answer : sum;
-			
-			list.remove(0);
+		for (int i = 0; i < n; i++) {
+			answer = answer < list.get(i) * (i + 1) ? list.get(i) * (i + 1) : answer;
 		}
 		
 		System.out.println(answer);
