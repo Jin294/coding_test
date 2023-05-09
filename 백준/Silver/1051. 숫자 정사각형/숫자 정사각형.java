@@ -18,16 +18,19 @@ public class Main {
 		}
 		
 		int answer = 1;
-		int min = n < m ? n : m;
-		for (int row = 0; row < n; row++) {
-			for (int col = 0; col < m; col++) {
+		int min = (n < m ? n : m) - 1;
+		outer : for (int size = min; size >= 1; size--) {
 				
-				for (int size = 1; size <= min; size++) {
-					if (col + size < m && row + size < n) 
+			for (int row = 0; row < n; row++) {
+				for (int col = 0; col < m; col++) {
+					if (col + size < m && row + size < n) {
 						if (board[row][col] == board[row][col + size]
 							&& board[row][col] == board[row + size][col]
-							&& board[row][col]== board[row + size][col + size])
-								answer = answer > size + 1 ? answer : size + 1;
+							&& board[row][col]== board[row + size][col + size]) {
+							answer = size + 1;
+							break outer;
+						}
+					}
 				}
 			}
 		}
