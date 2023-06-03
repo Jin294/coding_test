@@ -17,15 +17,15 @@ public class Main {
         for (int i = 0; i < m; i++) {
             long sum = pq.poll() + pq.poll();
 
-            for (int j = 0; j < 2; j++) {
-                pq.add(sum);
-            }
+            pq.add(sum);
+            pq.add(sum);
         }
 
-        System.out.println(getSum(pq));
-    }
+        long answer = 0;
+        for (int i = 0; i < n; i++) {
+            answer += pq.poll();
+        }
 
-    private static long getSum(PriorityQueue<Long> pq) {
-        return pq.stream().reduce(0L, (a, b) -> a + b);
+        System.out.println(answer);
     }
 }
