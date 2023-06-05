@@ -1,52 +1,65 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        int[][] board = new int[n][2];
+        ArrayList<Line> list = new ArrayList<>();
         StringTokenizer st;
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
-            board[i][0] = Integer.parseInt(st.nextToken());
-            board[i][1] = Integer.parseInt(st.nextToken());
+            list.add(new Line(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
         }
 
         // 시작점 기준으로 오름차순 정렬
-        Arrays.sort(board, (o1, o2) -> {
-            if (o1[0] == o2[0]) {
-                return Integer.compare(o1[1], o2[1]);
-            } else {
-                return Integer.compare(o1[0], o2[0]);
-            }
-        });
+        Collections.sort(list);
 
-        int s = board[0][0];
-        int e = board[0][1];
+        int s = list.get(0).start;
+        int e = list.get(0).end;
         int len = 0;
+
         // s - e : 현재 구간
         for (int i = 1; i < n; i++) {
-            if (board[i][0] > e) {
+            Line now = list.get(i);
+            // 현재 구간을 벗어났을 때
+            if (now.start > e) {
                 len += e - s;
-                s = board[i][0];
-                e = board[i][1];
+                s = now.start;
+                e = now.end;
             }
 
-            if (board[i][0] < s) {
-                s = board[i][0];
+            // 현재 구간에 시작점 또는 끝점이 포함될 때
+            if (now.start < s) {
+                s = now.start;
             }
 
-            if (board[i][1] > e) {
-                e = board[i][1];
+            if (now.end > e) {
+                e = now.end;
             }
 
         }
 
         len += e - s;
         System.out.println(len);
+    }
+
+    static class Line implements Comparable<Line> {
+        int start;
+        int end;
+
+        public Line(int start, int end) {
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        public int compareTo(Line o) {
+            return this.start - o.start;
+        }
     }
 }
