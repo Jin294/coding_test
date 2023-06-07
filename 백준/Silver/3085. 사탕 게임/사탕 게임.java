@@ -16,8 +16,9 @@ public class Main {
             board[i] = br.readLine().toCharArray();
         }
 
+        check();
         // 개수가 n과 같다면 더 이상 진행할 필요 없음 -> 중단
-        if (check() == n){
+        if (answer == n){
             System.out.println(n);
         } else {
             go();
@@ -26,85 +27,88 @@ public class Main {
     }
 
     private static void go() {
-        // swap
+        // swap horizontal
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
+            for (int j = 0; j < n - 1; j++) {
 
-                for (int k = 0; k < 2; k++) {
-                    // 이동한 new 좌표
-                    int ny = i + d[k][0];
-                    int nx = j + d[k][1];
+                if (board[i][j] != board[i][j + 1]) {
+                    swap(i, j, i, j + 1);
 
-                    // 범위 벗어나면 패스
-                    if (ny < 0 || nx < 0 || ny >= n || nx >= n){
-                        continue;
+                    check();
+                    if(answer == n) {
+                        return;
                     }
 
-                    // 스왑 조건 : 타겟 칸과 달라야 한다.
-                    if (board[i][j] != board[ny][nx]) {
-                        // 스왑
-                        swap(i, j, ny, nx, board[i][j], board[ny][nx]);
+                    swap(i, j, i, j + 1);
+                }
+            }
+        }
 
-                        // 개수가 n과 같다면 더 이상 진행할 필요 없음 -> 중단
-                        if (check() == n) {
-                            return;
-                        }
+        // swap vertical
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n - 1; j++) {
 
-                        // 원래대로 되돌린다.
-                        swap(i, j, ny, nx, board[i][j], board[ny][nx]);
+                if (board[j][i] != board[j + 1][i]) {
+                    swap(j, i, j + 1, i);
+
+                    check();
+                    if(answer == n) {
+                        return;
                     }
+
+                    swap(j, i, j + 1, i);
                 }
             }
         }
     }
 
-    private static void swap(int i, int j, int ny, int nx, char original, char nw) {
-        char tmp = original;
-        board[i][j] = nw;
-        board[ny][nx] = tmp;
+    private static void swap(int row, int col, int nRow, int nCol) {
+        char tmp = board[row][col];
+        board[row][col] = board[nRow][nCol];
+        board[nRow][nCol] = tmp;
     }
 
-    private static int check() {
-        // 가로
+    private static void check() {
+        // count horizontal
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                char target = board[i][j];
+            int count = 1;
 
-                int count = 0;
-                for (int k = 0; k < n; k++) {
-                    if (target == board[i][k]) {
-                        count++;
-                    } else {
-                        answer = answer < count ? count : answer;
-                        count = 0;
-                    }
+            for (int j = 0; j < n - 1; j++) {
+                if (board[i][j] == board[i][j + 1]) {
+                    count++;
+                } else {
+                    answer = answer < count ? count : answer;
+                    count = 1;
                 }
-                answer = answer < count ? count : answer;
-                // 개수가 n과 같다면 더 이상 진행할 필요 없음 -> 중단
-                if (answer == n) return n;
+            }
+
+            answer = answer < count ? count : answer;
+
+            // 개수가 n과 같다면 더 이상 진행할 필요 없음 -> 중단
+            if (count == n) {
+                return;
             }
         }
 
-        // 세로
+        // count vertical
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                char target = board[j][i];
+            int count = 1;
 
-                int count = 0;
-                for (int k = 0; k < n; k++) {
-                    if (target == board[k][i]) {
-                        count++;
-                    } else {
-                        answer = answer < count ? count : answer;
-                        count = 0;
-                    }
+            for (int j = 0; j < n - 1; j++) {
+                if (board[j][i] == board[j + 1][i]) {
+                    count++;
+                } else {
+                    answer = answer < count ? count : answer;
+                    count = 1;
                 }
-                answer = answer < count ? count : answer;
-                // 개수가 n과 같다면 더 이상 진행할 필요 없음 -> 중단
-                if (answer == n) return n;
+            }
+
+            answer = answer < count ? count : answer;
+
+            // 개수가 n과 같다면 더 이상 진행할 필요 없음 -> 중단
+            if (count == n) {
+                return;
             }
         }
-
-        return answer;
     }
 }
