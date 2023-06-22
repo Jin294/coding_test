@@ -12,9 +12,11 @@ public class Main {
         for (int i = 0; i < n; i++) {
             counts[1000 + Integer.parseInt(st.nextToken())] = true;
         }
-        for (int i = 0; i < counts.length; i++) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 2002; i++) {
             if (counts[i])
-                System.out.print((i - 1000) + " ");
+                sb.append((i - 1000) + " ");
         }
+        System.out.println(sb);
     }
 }
