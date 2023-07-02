@@ -6,20 +6,18 @@ import java.util.StringTokenizer;
 
 public class Main {
     static class Board implements Comparable<Board>{
-        int start;
-        int end;
+        int s, e;
 
-        public Board(int start, int end) {
-            this.start = start;
-            this.end = end;
+        public Board(int s, int e) {
+            this.s = s;
+            this.e = e;
         }
 
         @Override
         public int compareTo(Board o) {
-            if (this.start == o.start) {
-                return this.end - o.end;
-            }
-            return this.start - o.start;
+            if (this.s == o.s) 
+                return this.e - o.e;
+            return this.s - o.s;
         }
     }
     public static void main(String[] args) throws IOException {
@@ -37,15 +35,23 @@ public class Main {
 
         int answer = 0; // 널빤지 개수
         int range = 0; // 널빨지로 물 웅덩이를 덮고있는 범위
+        
         while (!pq.isEmpty()) {
             Board target = pq.poll();
-            if (target.start > range) {
-                range  = target.start;
+            if (target.s > range) {
+                range  = target.s;
             }
 
-            while (target.end > range) {
-                range += l;
+            if (target.e < range) {
+                continue;
+            }
+
+            int remain = (target.e - range) % l;
+            answer += (target.e - range) / l;
+            range = target.e;
+            if (remain != 0) {
                 answer++;
+                range += l - remain;
             }
         }
 
