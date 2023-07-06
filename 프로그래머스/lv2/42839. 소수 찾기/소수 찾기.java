@@ -18,20 +18,17 @@ class Solution {
             recursion(0, i);
         }
 
+        boolean[] isPrime = new boolean[max + 1];
+        isPrime[0] = isPrime[1] = true;
+        for (int i = 2; i <= Math.sqrt(max);  i++) {
+            for (int j = i * 2; j <= max; j += i) {
+                isPrime[j] = true;
+            }
+        }
+
         int count = 0;
         for (Integer item : set) {
-            boolean isPrime = true;
-            if (item <= 1) {
-                continue;
-            }
-            for (int i = 2; i <= Math.sqrt(item); i++) {
-                if (item % i == 0) {
-                    isPrime = false;
-                    break;
-                }
-            }
-
-            if (isPrime) {
+            if (!isPrime[item]) {
                 count++;
             }
         }
