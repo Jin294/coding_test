@@ -7,6 +7,15 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
+    static class Point{
+        int row;
+        int col;
+
+        public Point(int row, int col) {
+            this.row = row;
+            this.col = col;
+        }
+    }
     static int n, m;
     static int[][] d = {{-1, 0}, {1, 0},  {0, -1}, {0, 1}};
     static int[][] matrix, answer;
@@ -21,7 +30,7 @@ public class Main {
             Arrays.fill(answer[i], -1);
         }
 
-        int[] start = new int[2];
+        Point start = new Point(0, 0);
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < m; j++) {
@@ -29,8 +38,8 @@ public class Main {
                 if (matrix[i][j] == 0) {
                     answer[i][j] = 0;
                 } else if (matrix[i][j] == 2) {
-                    start[0] =  i;
-                    start[1] =  j;
+                    start.row =  i;
+                    start.col =  j;
                     answer[i][j] = 0;
                 }
             }
@@ -38,32 +47,34 @@ public class Main {
 
         BFS(start);
 
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                System.out.print(answer[i][j] + " ");
+                sb.append(answer[i][j] + " ");
             }
-            System.out.println();
+            sb.append("\n");
         }
+        System.out.println(sb);
     }
 
-    private static void BFS(int[] start) {
+    private static void BFS(Point start) {
 
-        Queue<int[]> q = new LinkedList<>();
+        Queue<Point> q = new LinkedList<>();
         q.add(start);
         while (!q.isEmpty()) {
-            int[] now = q.poll();
+            Point now = q.poll();
 
             for (int i = 0; i < 4; i++) {
-                int ny = now[0] + d[i][0];
-                int nx = now[1] + d[i][1];
+                int ny = now.row + d[i][0];
+                int nx = now.col + d[i][1];
 
                 if (ny >= n || ny < 0 || nx >= m || nx < 0) {
                     continue;
                 }
 
                 if (matrix[ny][nx] != 0 && answer[ny][nx] == -1) {
-                    answer[ny][nx] = answer[now[0]][now[1]] + 1;
-                    q.add(new int[]{ny, nx});
+                    answer[ny][nx] = answer[now.row][now.col] + 1;
+                    q.add(new Point(ny, nx));
                 }
             }
         }
