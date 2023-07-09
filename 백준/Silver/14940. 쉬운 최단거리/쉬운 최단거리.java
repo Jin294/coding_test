@@ -66,14 +66,13 @@ public class Main {
                 int ny = now.row + d[i][0];
                 int nx = now.col + d[i][1];
 
-                if (ny >= n || ny < 0 || nx >= m || nx < 0) {
-                    continue;
+                if (ny < n && ny >= 0 && nx < m && nx >= 0) {
+                    if (matrix[ny][nx] != 0 && answer[ny][nx] == -1) {
+                        answer[ny][nx] = answer[now.row][now.col] + 1;
+                        q.add(new Point(ny, nx));
+                    }
                 }
 
-                if (matrix[ny][nx] != 0 && answer[ny][nx] == -1) {
-                    answer[ny][nx] = answer[now.row][now.col] + 1;
-                    q.add(new Point(ny, nx));
-                }
             }
         }
     }
