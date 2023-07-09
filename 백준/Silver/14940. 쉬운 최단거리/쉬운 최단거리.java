@@ -26,12 +26,10 @@ public class Main {
         m = Integer.parseInt(st.nextToken());
         matrix = new int[n][m];
         answer = new int[n][m];
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(answer[i], -1);
-        }
 
         Point start = new Point(0, 0);
         for (int i = 0; i < n; i++) {
+            Arrays.fill(answer[i], -1);
             st = new StringTokenizer(br.readLine());
             for (int j = 0; j < m; j++) {
                 matrix[i][j] = Integer.parseInt(st.nextToken());
