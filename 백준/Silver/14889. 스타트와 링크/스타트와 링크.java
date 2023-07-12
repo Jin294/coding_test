@@ -8,7 +8,6 @@ public class Main {
     static int n, min, half;
     static int[][] matrix;
     static boolean[] visited;
-    static ArrayList<Integer> one, two;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         n = Integer.parseInt(br.readLine());
@@ -29,46 +28,38 @@ public class Main {
 
     // true : start, false : link
     // 부분집합
-    private static void recursion(int depth, int start) {
+    private static void recursion(int depth, int count) {
         // 한 팀이 half명 이상이 되면 리턴
         if (depth == n) {
             return;
         }
 
         // 한 팀이 half명 일때만
-        if (start == half) {
-            one = new ArrayList<>();
-            two = new ArrayList<>();
-
-            for (int i = 0; i < n; i++) {
-                if (visited[i]) {
-                    one.add(i);
-                } else {
-                    two.add(i);
-                }
-            }
-
-            int sum1 = getSum(one);
-            int sum2 = getSum(two);
-            min = Math.min(min, Math.abs(sum1 - sum2));
+        if (count == half) {
+            min = Math.min(getDiff(), min);
             return;
         }
 
         visited[depth] = true;
-        recursion(depth + 1, start + 1);
+        recursion(depth + 1, count + 1);
         visited[depth] = false;
-        recursion(depth + 1, start);
+        recursion(depth + 1, count);
     }
 
-    private static int getSum(ArrayList<Integer> list) {
-        int sum = 0;
-        for (int i = 0; i < list.size(); i++) {
-            for (int j = 0; j < list.size(); j++) {
-                if (i != j) {
-                    sum += matrix[list.get(i)][list.get(j)];
+    private static int getDiff() {
+        int team_start = 0;
+        int team_link = 0;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (visited[i] && visited[j]) {
+                    team_start += matrix[i][j];
+                    team_start += matrix[j][i];
+                } else if (!visited[i] && !visited[j]) {
+                    team_link += matrix[i][j];
+                    team_link += matrix[j][i];
                 }
             }
         }
-        return sum;
+        return Math.abs(team_link - team_start);
     }
 }
