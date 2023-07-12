@@ -23,43 +23,41 @@ public class Main {
         }
         visited = new boolean[n];
         min = Integer.MAX_VALUE;
-        recursion(0, 0, 0);
+        recursion(0, 0);
         System.out.println(min);
     }
 
     // true : start, false : link
     // 부분집합
-    private static void recursion(int depth, int start, int link) {
+    private static void recursion(int depth, int start) {
         // 한 팀이 half명 이상이 되면 리턴
-        if (start > half || link > half) {
+        if (depth == n) {
             return;
         }
 
-        if (depth == n) {
-            // 각 팀이 half명 일때만
-            if (start == half && link == half) {
-                one = new ArrayList<>();
-                two = new ArrayList<>();
+        // 한 팀이 half명 일때만
+        if (start == half) {
+            one = new ArrayList<>();
+            two = new ArrayList<>();
 
-                for (int i = 0; i < n; i++) {
-                    if (visited[i]) {
-                        one.add(i);
-                    } else {
-                        two.add(i);
-                    }
+            for (int i = 0; i < n; i++) {
+                if (visited[i]) {
+                    one.add(i);
+                } else {
+                    two.add(i);
                 }
-
-                int sum1 = getSum(one);
-                int sum2 = getSum(two);
-                min = Math.min(min, Math.abs(sum1 - sum2));
             }
+
+            int sum1 = getSum(one);
+            int sum2 = getSum(two);
+            min = Math.min(min, Math.abs(sum1 - sum2));
             return;
         }
 
         visited[depth] = true;
-        recursion(depth + 1, start + 1, link);
+        recursion(depth + 1, start + 1);
         visited[depth] = false;
-        recursion(depth + 1, start, link + 1);
+        recursion(depth + 1, start);
     }
 
     private static int getSum(ArrayList<Integer> list) {
