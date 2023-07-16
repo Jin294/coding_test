@@ -7,7 +7,7 @@ public class Main {
     static int n, answer;
     static int[] lineUp; // 선수 순서의 배열 (인덱스와 무관)
     static int[][] matrix;
-    static boolean[] base, visited;
+    static boolean[] visited;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         n = Integer.parseInt(br.readLine());
@@ -25,9 +25,7 @@ public class Main {
         lineUp[4] = 1; // 4번째 선수는 1번 타자
         visited = new boolean[10];
         visited[4] = true; // 4번 자리는 이미 차있으므로 체크
-
         recursion(2); // 1번 선수는 이미 자리가 정해졌기에 2번 선수부터
-
         System.out.println(answer);
     }
 
@@ -52,76 +50,30 @@ public class Main {
 
     // 3. 순서에 맞게 점수계산하며 최대점수 경신
     private static int playBaseball() {
-        int score = 0;
+        int sum = 0;
         int idx = 1;
         for (int inning = 0; inning < n; inning++) {
             int out = 0;
-            base = new boolean[4];
-
+            int bases = 0;
+            int inningScore = 0;
             while (out < 3) {
-                int now = matrix[inning][lineUp[idx++]];
-                switch (now) {
-                    case 0 :
-                        out++;
-                        break;
-                    case 1:
-                        for (int i = 3; i >= 1; i--) {
-                            if (base[i]) {
-                                if (i == 3) {
-                                    base[i] = false;
-                                    score++;
-                                } else {
-                                    base[i + 1] = true;
-                                    base[i] = false;
-                                }
-                            }
-                        }
-
-                        base[1] = true;
-                        break;
-                    case 2:
-                        for (int i = 3; i >= 1; i--) {
-                            if (base[i]) {
-                                if (i == 2 || i == 3) {
-                                    base[i] = false;
-                                    score++;
-                                } else {
-                                    base[i + 2] = true;
-                                    base[i] = false;
-                                }
-                            }
-                        }
-
-                        base[2] = true;
-                        break;
-                    case 3:
-                        for (int i = 1; i <= 3; i++) {
-                            if (base[i]) {
-                                base[i] = false;
-                                score++;
-                            }
-                        }
-
-                        base[3] = true;
-                        break;
-                    case 4: // 홈런
-                        for (int i = 1; i <= 3; i++) {
-                            if (base[i]) {
-                                base[i] = false;
-                                score++;
-                            }
-                        }
-                        score++;
-                        break;
+                int hit = matrix[inning][lineUp[idx++]];
+                if (hit == 0) {
+                    out++;
+                } else {
+                    bases = (bases + 1) << hit;
+                    inningScore += Integer.bitCount(bases / 16);
+                    bases = bases % 16;
                 }
 
                 if (idx >= 10) {
                     idx = 1;
                 }
-
             }
+
+            sum += inningScore;
         }
 
-        return score;
+        return sum;
     }
 }
