@@ -5,15 +5,15 @@ import java.util.*;
 
 public class Main {
     static class Point{
-        int loc;
-        int val;
+        int location;
+        int distance;
 
-        public Point(int loc, int val) {
-            this.loc = loc;
-            this.val = val;
+        public Point(int location, int distance) {
+            this.location = location;
+            this.distance = distance;
         }
     }
-    static int n;
+    static int n, maxDistance, destination, cnt;
     static boolean[] visited;
     static ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
     public static void main(String[] args) throws IOException {
@@ -37,59 +37,39 @@ public class Main {
             graph.get(b).add(a);
         }
 
-        int max = getDist();
-        ArrayList<Integer> answer = findLoc(max);
-        Collections.sort(answer);
-        System.out.println(answer.get(0) + " " + max + " " + answer.size());
+        getDist();
+        System.out.println(destination + " " + maxDistance + " " + cnt);
     }
 
-    // 1로부터 해당 지점까지의 거리 계산
-    private static int getDist() {
+    // BFS
+    private static void getDist() {
         Queue<Point> q = new LinkedList<>();
         q.add(new Point(1, 0));
         visited = new boolean[n + 1];
         visited[1] = true;
 
-        int max = 0;
         while (!q.isEmpty()) {
-            Point now = q.poll();
-            ArrayList<Integer> list = graph.get(now.loc);
-            max = Math.max(max, now.val);
-            for (int i = 0; i < list.size(); i++) {
-                if (!visited[list.get(i)]) {
-                    visited[list.get(i)] = true;
-                    q.add(new Point(list.get(i), now.val + 1));
-                }
+            Point cur = q.poll();
+            int now = cur.location;
+            int distance = cur.distance;
+
+            if (distance > maxDistance) {
+                maxDistance = distance;
+                destination = now;
+                cnt = 1;
+            } else if (distance == maxDistance) {
+                destination = Math.min(destination, now);
+                cnt++;
             }
-        }
 
-        return max;
-    }
-
-    private static ArrayList<Integer> findLoc(int len) {
-        Queue<Point> q = new LinkedList<>();
-        q.add(new Point(1, 0));
-        visited = new boolean[n + 1];
-        visited[1] = true;
-
-        ArrayList<Integer> result = new ArrayList<>();
-        while (!q.isEmpty()) {
-            Point now = q.poll();
-            ArrayList<Integer> list = graph.get(now.loc);
-
-            if (now.val == len) {
-                result.add(now.loc);
-            }
+            ArrayList<Integer> list = graph.get(cur.location);
 
             for (int i = 0; i < list.size(); i++) {
                 if (!visited[list.get(i)]) {
                     visited[list.get(i)] = true;
-                    q.add(new Point(list.get(i), now.val + 1));
+                    q.add(new Point(list.get(i), cur.distance + 1));
                 }
             }
         }
-
-        return result;
     }
-
 }
