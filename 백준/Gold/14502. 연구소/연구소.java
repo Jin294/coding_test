@@ -44,22 +44,23 @@ public class Main {
         choice = new Point[3];
         visited = new boolean[count];
 
-        getThree(0);
+        getThree(0, 0);
 
         System.out.println(answer);
     }
 
-    private static void getThree(int depth) {
+    // 순열 만들기
+    private static void getThree(int depth, int now) {
         if (depth == 3) {
             go();
             return;
         }
 
-        for (int i = 0; i < visited.length; i++) {
+        for (int i = now; i < visited.length; i++) {
             if (!visited[i]) {
                 visited[i] = true;
                 choice[depth] = spaceList.get(i);
-                getThree(depth + 1);
+                getThree(depth + 1, i + 1);
                 visited[i] = false;
             }
         }
