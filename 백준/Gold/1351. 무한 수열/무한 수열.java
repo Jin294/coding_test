@@ -13,17 +13,13 @@ public class Main {
         long n = Long.parseLong(st.nextToken());
         p = Integer.parseInt(st.nextToken());
         q = Integer.parseInt(st.nextToken());
-
-        map.put(0L, 1L);
-
-        solution(n);
-        System.out.println(map.get(n));
+        System.out.println(solution(n));
     }
 
     private static long solution(long num) {
-        if (num == 0) return map.get(num);
-
-        if (!map.containsKey(num)) map.put(num, solution(num / p) + solution(num / q));
-        return map.get(num);
+        if (num == 0) return 1L;
+        if (!map.containsKey(num / p)) map.put(num / p, solution(num / p));
+        if (!map.containsKey(num / q)) map.put(num / q, solution(num / q));
+        return map.get(num / p) + map.get(num / q);
     }
 }
