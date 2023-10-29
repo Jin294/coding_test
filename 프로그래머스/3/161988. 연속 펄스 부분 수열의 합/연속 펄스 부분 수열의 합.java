@@ -2,32 +2,32 @@ import java.util.*;
 
 class Solution {
     public long solution(int[] sequence) {
-        // 펄스 만들기
-        int[] one = new int[sequence.length];
-        int[] two = new int[sequence.length];
-        
-        int pulse = 1;
-        for (int i = 0; i < sequence.length; i++) {
-            one[i] = sequence[i] * pulse;
-            pulse *= -1;
-            two[i] = sequence[i] * pulse;
+        int len = sequence.length;
+
+        // 펄스 배열 만들기
+        int[] plus = new int[len];
+        int[] minus = new int[len];
+        int num = 1;
+        for (int i = 0; i < len; i++) {
+            plus[i] = num * sequence[i];
+            num *= -1;
+            minus[i] = num * sequence[i];
         }
         
-        long[] dpA = new long[sequence.length];
-        long[] dpB = new long[sequence.length];
+        // dp 배열 만들기
+        long[] dp1 = new long[len];
+        long[] dp2 = new long[len];
+        dp1[0] = plus[0];
+        dp2[0] = minus[0];
+        long result = Math.max(dp1[0], dp2[0]);
         
-        dpA[0] = one[0];
-        dpB[0] = two[0];
-        long answer = Math.max(dpA[0], dpB[0]);
-        
-        for (int i = 1; i < sequence.length; i++) {
-            dpA[i] = Math.max(dpA[i-1] + one[i], one[i]);
-            dpB[i] = Math.max(dpB[i-1] + two[i], two[i]);
+        for (int i = 1; i < len; i++) {
+            dp1[i] = Math.max(dp1[i - 1] + plus[i], plus[i]);
+            dp2[i] = Math.max(dp2[i - 1] + minus[i], minus[i]);
             
-            long max = Math.max(dpA[i], dpB[i]);
-            answer = Math.max(answer, max);
+            result = Math.max(result, Math.max(dp1[i], dp2[i]));
         }
-        
-        return answer;
+
+        return Math.max(result, Math.max(dp1[len - 1], dp2[len - 1]));
     }
 }
