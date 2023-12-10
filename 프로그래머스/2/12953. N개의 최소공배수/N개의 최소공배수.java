@@ -18,8 +18,7 @@ class Solution {
     }
     
     public int LCM(int a, int b) {
-        int gcm = GCM(a, b);
-        return gcm == 0 ? 0 : (a / gcm) * b;
+        return a / GCM(a, b) * b;
     }
     
     public int GCM(int a, int b) {
