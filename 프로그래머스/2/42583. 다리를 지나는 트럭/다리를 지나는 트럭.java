@@ -1,6 +1,7 @@
 import java.util.*;
 
 class Solution {
+    static Queue<int[]> q = new LinkedList<>();
     static Stack<Integer> stack = new Stack<>();
     public int solution(int bridge_length, int weight, int[] truck_weights) {
         Queue<Integer> q = new LinkedList<>();
