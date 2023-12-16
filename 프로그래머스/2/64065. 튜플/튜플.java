@@ -18,6 +18,8 @@ class Solution {
             }
         });
         ArrayList<Integer> list = new ArrayList<>();
+        int[] answer = new int[splits.length];
+        int idx = 0;
         for (String x : splits) {
             String[] arr = x.split(",");
             
@@ -25,15 +27,9 @@ class Solution {
                 int num = Integer.parseInt(item);
                 if (!list.contains(num))  {
                     list.add(num);
+                    answer[idx++] = num;
                 }
             }
-        }
-        
-        
-        Integer[] integerArray = list.toArray(new Integer[0]);
-        int[] answer = new int[integerArray.length];
-        for (int i = 0; i < integerArray.length; i++) {
-            answer[i] = integerArray[i];
         }
         
         return answer;
