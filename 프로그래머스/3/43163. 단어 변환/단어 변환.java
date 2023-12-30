@@ -1,69 +1,51 @@
 import java.util.*;
 
-// 단어 하나하나마다 일일이 charAt으로 글자 비교하는 방법밖에 없나?
-// 이외에는 방법이 생각나지 않는다.
-// 최악의 경우에는 길이 10의 단어를 50을 거쳐야 하는데
-// 500 + 490 + 480 + ...
-// (500 + 501) / 2 = ((n * m) + (n * m + 1)) / 2 => n * m
-// 단어길이 n, 단어개수 m;
-
-// 일단 최종 변환이 가능한지부터 체크하고
-// 가능하다면 일일이 단어변환
-
-// gpt는 bfs 써보라고 함
-// 이차원 리스트로 각 문자열의 인덱스에 들어갈 수 있는 알파벳을 수집
-// bfs로 한글자씩 바꾼다음 set add에서 true 나오면 그 때에 큐에 넣는다?
-
+// words에 target이 있는지 먼저 검사한다
+// 큐에 단어를 넣고 하나씩 뽑는다
+// 뽑는 단어의 모든 글자마다 a - z로 변경해가며 words에 있는지 찾는다
 
 class Solution {
-    static Set<String> set = new HashSet<>();
     public int solution(String begin, String target, String[] words) {
-        // target이 없다면 바로 0 반환
-        Set<String> dict = new HashSet<>(Arrays.asList(words));
-        if (!dict.contains(target)) {
-            return 0;
+        int answer = 0;
+        Set<String> set = new HashSet<>();
+        for (String x : words) {
+            set.add(x);
         }
-                
-        // BFS 구현
+        
+        if (!set.contains(target)) {  // 타겟 없으면 종료
+            return answer;
+        }
+        
         Queue<String> q = new LinkedList<>();
         q.add(begin);
-        
-        int level = 0;
-        while(!q.isEmpty()) {
+        while (!q.isEmpty()) {
             int size = q.size();
-            
-            // 그냥 BFS로 구현하면 단어 하나마다 단계가 늘어난다
-            // => 단계측정 어려움
-            // 단계 측정을 위해 while문 안에 추가적인 반복문 구현
-            for (int i = 0; i < size; i++) {
-                String currentWord = q.poll();
+            for (int a = 0; a < size; a++) {
+                String str = q.poll();
                 
-                // 현재 단어가 목표에 도달하면 중단
-                if (currentWord.equals(target)) {
-                    return level;
+                if (str.equals(target)){
+                    return answer;
                 }
-            
-                // 문자 배열로 만든다
-                char[] currentChars = currentWord.toCharArray();
-                // 한 글자 씩 바꾼다
-                for (int j = 0; j < currentChars.length; j++) {
-                    char originalChar = currentChars[j];
-                    
-                    // a부터 z까지 모두 바꿔본다
-                    for (char c = 'a'; c <= 'z'; c++) {
-                        currentChars[j] = c;
-                        String newWord = new String(currentChars);
-                        if (dict.contains(newWord)) {
-                            q.add(newWord);
-                            dict.remove(newWord);
+                
+                char[] arr = str.toCharArray();
+                for (int i = 0; i < str.length(); i++) {
+
+                    char original = arr[i];
+                    for (char x = 'a'; x <= 'z'; x++) {
+                        arr[i] = x;
+                        String replaced = new String(arr);
+                        if (set.contains(replaced)) {
+                            q.add(replaced);
+                            set.remove(replaced);
                         }
-                        currentChars[j] = originalChar;
                     }
+
+                    arr[i] = original;
                 }
             }
             
-            // 한 단계가 끝나면 단계 증가
-            level++;
+            // 한 단어에서 파생된 단어들이 모두 추가되면 그 때 레벨이 올라감
+            answer++;
         }
         
         return 0;
