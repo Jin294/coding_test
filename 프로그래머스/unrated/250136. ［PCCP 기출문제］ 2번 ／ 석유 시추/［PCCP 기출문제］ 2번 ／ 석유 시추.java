@@ -1,107 +1,112 @@
 import java.util.*;
 
 // 유니온 파인드 문제
+// 유니온 메서드
+// 파인드 메서드
 
 class Solution {
-    // 북 동 남 서
-    static int[] moveY = {-1, 0, 1, 0};
+    
+    static int[] moveY = {-1, 0, 1, 0}; // 북, 동, 서, 남
     static int[] moveX = {0, 1, 0, -1};
     
-    static int[] parents;
+    static int[][] gLand;
+    static int[] parent;
+    static int max, y, x;
     
-    static int row, col;
     static final int OIL = 1;
+    
     public int solution(int[][] land) {
-        row = land.length;
-        col = land[0].length;
-        
-        // 유니온파인드 밑준비
-        // 이차원배열을 분리해 길다란 일차원 배열로 만든다
-        // 부모정보의 초깃값은 인덱스값으로 (자기 자신)
-        parents = new int[row * col];
-        for (int i = 0; i < parents.length; i++) {
-            parents[i] = i;
-        }
-        
-        // 중복체크 방지위한 부울배열
-        // 이차원배열 탐색하며 석유칸끼리 묶는다
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                if (land[i][j] == OIL) {
-                    for (int k = 0; k < 4; k++) {
-                        int nr = i + moveY[k];
-                        int nc = j + moveX[k];
-                        
-                        if ((nr >= 0 && nc >= 0 && nr < row && nc < col) && land[nr][nc] == OIL) {
-                            union(i * col+ j, nr * col + nc);
-                        }
-                    }
-                }
+        gLand = land;
+        init();
+        goUnion();
+        return getMaxOil(countOilMass());
+    }
+    
+    public Map<Integer, Integer> countOilMass() {
+        Map<Integer, Integer> countOil = new HashMap<>();
+        for (int i = 0; i < parent.length; i++) {
+            if (gLand[i / x][i % x] == OIL) {
+                int root = find(i);
+                
+                countOil.put(root, countOil.getOrDefault(root, 0) + 1);
             }
         }
         
-        // 석유칸 카운트
-        Map<Integer, Integer> countMap = new HashMap<>();
-        countOil(countMap, land);
-        
-        // 본격 시추
+        return countOil;
+    }
+    
+    public int getMaxOil(Map<Integer, Integer> countOil) {
+        // 시추관 위치에 따른 뽑을 수 있는 석유의 최댓값 찾기
         int answer = 0;
-        for (int j = 0; j < col; j++) {
-            // roots 중복을 거를 set
-            Set<Integer> uniqueRoots = new HashSet<>();
+        for (int j = 0; j < x; j++) {
             int sum = 0;
-            // 각각의 열마다 검사
-            for (int i = 0; i < row; i++) {
-                // 석유가 있는 칸이라면 
-                if (land[i][j] == OIL) {
-                    // 그 근원(부모)를 찾는다
-                    int root = find(i * col + j);
-                    // 부모가 등록되어있지 않다면
-                    if (!uniqueRoots.contains(root)) {
-                        uniqueRoots.add(root);
-                        sum += countMap.get(root);
+            Set<Integer> uniqueParents = new HashSet<>();
+            for (int i = 0; i < y; i++) {
+                if (gLand[i][j] == OIL) {
+                    int root = find(i * x + j);
+                    if (!uniqueParents.contains(root)) {
+                        uniqueParents.add(root);
+                        sum += countOil.get(root);
                     }
-                    
-                    // 부모가 등록되어 있다 -> 이미 그 덩어리는 추가함.
                 }
             }
             
-            // 최댓값 경신
             answer = Math.max(answer, sum);
         }
         
         return answer;
     }
     
-    public void countOil(Map<Integer, Integer> map, int[][] land) {
-        for (int i = 0; i < row * col; i++) {
-            if (land[i / col][i % col] == OIL) {
-                int root = find(i);
-
-                map.put(root, map.getOrDefault(root, 0) + 1);
-            }
-        }
-    }
-    
-    public int find(int num) {
-        while (num != parents[num]) {
-            parents[num] = parents[parents[num]];
-            num = parents[num];
+    public int find(int x) {
+        while (x != parent[x]) {
+            parent[x] = parent[parent[x]];
+            x = parent[x];
         }
         
-        return num;
+        return x;
     }
     
     public void union(int orig, int next) {
         orig = find(orig);
         next = find(next);
         
-        if (orig != next)  {
-            if (orig < next) {
-                parents[next] = orig;
+        if (orig != next) {
+            if (orig > next) {
+                parent[orig] = next;
             } else {
-                parents[orig] = next;
+                parent[next] = orig;
             }
         }
+    }
+    
+    public void goUnion() {
+        for (int i = 0; i < y; i++) {
+            for (int j = 0; j < x; j++) {
+                if (gLand[i][j] == OIL) {
+                    for (int k = 0; k < 4; k++) {
+                        int nr = i + moveY[k];
+                        int nc = j + moveX[k];
+                        
+                        if (isIn(nr, nc) && gLand[nr][nc] == OIL) {
+                            union(i * x + j, nr * x + nc);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    public void init() {
+        y = gLand.length;
+        x = gLand[0].length;
+        
+        parent = new int[y * x];
+        for (int i = 0; i < parent.length; i++) {
+            parent[i] = i;
+        }
+    }
+    
+    public boolean isIn(int row, int col) {
+        return row >= 0 && col >= 0 && row < y && col < x;
     }
 }
