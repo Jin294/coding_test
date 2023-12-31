@@ -1,44 +1,43 @@
+import java.util.*;
+
 class Solution {
     static int[] gInfo;
     static int[][] gEdges;
-    static int maxSheep;
     
+    static int answer;
     static final int SHEEP = 0;
     static final int WOLF = 1;
-    
     public int solution(int[] info, int[][] edges) {
         gInfo = info;
         gEdges = edges;
         
-        boolean[] visited = new boolean[info.length];
-        DFS(0, 0, 0, visited);
+        DFS(0, 0, 0, new boolean[info.length]);
         
-        return maxSheep;
+        return answer;
     }
     
-    public void DFS(int now, int sheepCnt, int wolfCnt, boolean[] visited) {
+    public void DFS(int now, int sheepCnt, int wolfCnt, boolean[] isVisited) {
         if (gInfo[now] == SHEEP) {
             sheepCnt++;
         } else {
             wolfCnt++;
         }
-        visited[now] = true;
         
         if (sheepCnt <= wolfCnt) {
             return;
         }
+                
+        isVisited[now] = true;
+        answer = Math.max(answer, sheepCnt);
         
-        maxSheep = Math.max(maxSheep, sheepCnt);
-        
-        for (int[] edges : gEdges) {
-            int parent = edges[0];
-            int child = edges[1];
+        for (int[] edge : gEdges) {
+            int parent = edge[0];
+            int child = edge[1];
             
-            // 부모는 방문했고 아이는 방문하지 않았다면
-            if (visited[parent] && !visited[child]) {
-                boolean[] nextVisited = new boolean[visited.length];
+            if (isVisited[parent] && !isVisited[child]) {
+                boolean[] nextVisited = new boolean[gInfo.length];
                 for (int i = 0; i < nextVisited.length; i++) {
-                    nextVisited[i] = visited[i];
+                    nextVisited[i] = isVisited[i];
                 }
                 
                 DFS(child, sheepCnt, wolfCnt, nextVisited);
