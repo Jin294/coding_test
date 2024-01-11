@@ -1,16 +1,49 @@
+import java.util.*;
+
 class Solution {
+    static Set<String> set;
     public int solution(int n) {
-        int answer = 0;
+        set = new HashSet<>();
+        int open = n;
+        int close = n;
         
-        int[] dp = new int[n + 1];
-        dp[0] = 1;
+        makeBrace(open, close, new String(""));
         
-        for (int i = 1; i <= n; i++) {
-            for (int j = 0; j < i; j++) {
-                dp[i] += dp[(i - 1) - j] * dp[j];
+        return set.size();
+    }
+    
+    public void makeBrace(int open, int close, String now) {
+        if (open == 0 && close == 0) {
+            isCorrect(now);
+            return;
+        }
+        
+        if (open != 0) {
+            makeBrace(open - 1, close, now + "(");
+        }
+        if (close != 0) {
+            makeBrace(open, close - 1, now + ")");
+        }
+    }
+    
+    public void isCorrect(String now) {
+        Stack<Character> stack = new Stack<>();
+        char[] arr = now.toCharArray();
+        for (char x : arr) {
+            if (x == '(') {
+                stack.add(x);
+            } else {
+                if (stack.isEmpty()) {
+                    return;
+                }
+                stack.pop();
             }
         }
         
-        return dp[n];
+        if (!stack.isEmpty()) {
+            return;
+        }
+        
+        set.add(now);
     }
 }
