@@ -2,9 +2,8 @@ import java.util.*;
 
 class Solution {
     static Map<String, Integer> nameToNum;
-    static ArrayList<ArrayList<String>> graph;
-    static int n, max;
-    static int[] level, parent;
+    static int n;
+    static int[] parent;
     // enroll : 자식, referral : 부모
     public int[] solution(String[] enroll, String[] referral, String[] seller, int[] amount) {
         n = enroll.length;
@@ -15,10 +14,6 @@ class Solution {
         }
         // 이차원 그래프 구현 및 데이터 넣기
         n = enroll.length;
-        graph = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            graph.add(new ArrayList<>());
-        }
         
         // i번째 enroll의 부모인덱스
         parent = new int[n];
@@ -36,17 +31,9 @@ class Solution {
             // 부모 인덱스위치의 리스트에 자식 이름 넣는다.
             int childIdx = nameToNum.get(enroll[i]);
             int parentIdx = nameToNum.get(referral[i]);
-            graph.get(parentIdx).add(enroll[i]);
             parent[childIdx] = parentIdx;
         }
         
-        level = new int[n];
-        for (int i = 0; i < n; i++) {
-            // 직속 부하들에게 다 연결되니까, 직속부하만 DFS 진행
-            if (referral[i].equals(enroll[i])) {
-                DFS(0, i);
-            }
-        }
         
         // seller에 같은 이름이 중복해서 들어있을 수 있기 때문에 더해줘야 한다.
         int[] income = new int[n];
@@ -71,16 +58,5 @@ class Solution {
         }
 
         return income;
-    }
-    
-    public void DFS(int depth, int now) {
-        ArrayList<String> list = graph.get(now);
-        
-        for (int i = 0; i < list.size(); i++) {
-            DFS(depth + 1, nameToNum.get(list.get(i)));
-        }
-        
-        level[now] = depth;
-        max = Math.max(max, depth);
     }
 }
