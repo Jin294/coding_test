@@ -39,30 +39,28 @@ class Solution {
         q.add(start);
         visited[start[0]][start[1]] = true;
         while(!q.isEmpty()) {
-            for (int i = 0; i < q.size(); i++) {
-                int[] now = q.poll();
+            int[] now = q.poll();
 
-                int r = now[0];
-                int c = now[1];
-                if (r == goal[0] && c == goal[1]) {
-                    return now[2];
+            int r = now[0];
+            int c = now[1];
+            if (r == goal[0] && c == goal[1]) {
+                return now[2];
+            }
+
+            for (int i = 0; i < 4; i++) {
+                int nr = r + moveY[i];
+                int nc = c + moveX[i];
+                while (isVaild(nr, nc) && !isObstacle(nr, nc)) {
+                    nr += moveY[i];
+                    nc += moveX[i];
                 }
 
-                for (int j = 0; j < 4; j++) {
-                    int nr = r + moveY[j];
-                    int nc = c + moveX[j];
-                    while (isVaild(nr, nc) && !isObstacle(nr, nc)) {
-                        nr += moveY[j];
-                        nc += moveX[j];
-                    }
-                    
-                    nr -= moveY[j];
-                    nc -= moveX[j];
-                    
-                    if (!visited[nr][nc]) {
-                        visited[nr][nc] = true;
-                        q.add(new int[]{nr, nc, now[2] + 1});
-                    }
+                nr -= moveY[i];
+                nc -= moveX[i];
+
+                if (!visited[nr][nc]) {
+                    visited[nr][nc] = true;
+                    q.add(new int[]{nr, nc, now[2] + 1});
                 }
             }
         }
