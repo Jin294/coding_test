@@ -10,16 +10,14 @@ class Solution {
         });
         int answer = 1;
         
-        int s = targets[0][0];
-        int e = targets[0][1];
+        int end = targets[0][1];
         
         for (int[] target : targets)  {
-            int ns = target[0];
-            int ne = target[1];
+            int newStart = target[0];
+            int newEnd = target[1];
             
-            if (ns >= e) {
-                s = ns;
-                e = ne;
+            if (newStart >= end) {
+                end = newEnd;
                 answer++;
             }
         }
