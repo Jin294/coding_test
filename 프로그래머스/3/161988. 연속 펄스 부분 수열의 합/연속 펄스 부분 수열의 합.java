@@ -2,16 +2,13 @@ import java.util.*;
 
 class Solution {
     static int len;
-    static long max = 0l;
-    static int[] gSequence, plus, minus;
     static long[] dp1, dp2;
     public long solution(int[] sequence) {
-        gSequence = sequence;
         len = sequence.length;
         
         // 배열 길이만큼 펄스 수열 만듦
-        plus = makePulse(1, -1);
-        minus = makePulse(-1, 1);
+        int[] plus = makePulse(1, -1);
+        int[] minus = makePulse(-1, 1);
         
         // dp 만들기
         dp1 = makeArrayDynamic(sequence, plus);
@@ -35,7 +32,6 @@ class Solution {
             max = Math.max(max, dp[idx] - dp[i]);
         }
         
-        System.out.println(max);
         return max;
     }
     
