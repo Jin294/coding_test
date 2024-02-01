@@ -8,16 +8,12 @@ class Solution {
     // 모든 경우의 제재 아이디 목록을 담을 result
     HashSet<HashSet<String>> result;
     
-    // 방문여부를 체크하는 visited
-    boolean[] visited;
-    
     public int solution(String[] user_id, String[] banned_id) {
         // 전역변수에 매개변수 할당
         userIds = user_id;
         bannedIds = banned_id;
         
         // 초기화
-        visited = new boolean[user_id.length];
         result = new HashSet<>();
 
         // 깊이우선탐색 시작
