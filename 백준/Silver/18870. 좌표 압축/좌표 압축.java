@@ -29,19 +29,19 @@ public class Main {
         int[] copy = Arrays.copyOf(arr, n);
         Arrays.sort(copy);
 
-        // 2. 중복 제거
-        ArrayList<Integer> list = new ArrayList<>();
+        // 2. 중복 제거 및 순위 할당
+        Map<Integer, Integer> map = new HashMap<>();
+        int rank = 0;
         for (int i = 0; i < n; i++) {
-            if (i == 0 || copy[i - 1] != copy[i]) {
-                list.add(copy[i]);
+            if (!map.containsKey(copy[i])) {
+                map.put(copy[i], rank++);
             }
         }
 
         // 3. 원래 배열의 요소에 대해 순위 할당
-        int[] uniqueNum = list.stream().mapToInt(x -> x).toArray();
         int[] result = new int[n];
         for (int i = 0; i < n; i++) {
-            result[i] = Arrays.binarySearch(uniqueNum, arr[i]);
+            result[i] = map.get(arr[i]);
         }
 
         return result;
