@@ -1,34 +1,33 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
+
         int[] arr = new int[n];
         for (int i = 0; i < n; i++) {
             arr[i] = Integer.parseInt(br.readLine());
         }
+
         Arrays.sort(arr);
-        int answer = Integer.MAX_VALUE;
-        for (int i = n - 1; i >= 0; i--) {
-            for (int j = i - 1; j >= 0; j--) {
-                int diff = arr[i] - arr[j];
-                if (diff >= m) {
-                    answer = Math.min(diff, answer);
-                    break;
-                }
+
+        int e = 0;
+        int min = Integer.MAX_VALUE;
+        for (int s = 0; s < n; s++) {
+            // 차이가 m이하라면 계속 e 증가
+            while (e < n && arr[e] - arr[s] < m) {
+                e++;
             }
 
-            if (answer == m) {
+            if (e == n) {
                 break;
             }
+            min = Math.min(min, arr[e] - arr[s]);
         }
-        System.out.println(answer);
+        System.out.println(min);
     }
 }
