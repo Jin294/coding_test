@@ -43,11 +43,13 @@ public class Main {
             }
         }
 
+        StringBuilder sb = new StringBuilder();
         for (int i = 1; i <= V; i++) {
             for (int j = 1; j <= V; j++) {
-                System.out.print(matrix[i][j] == MAX ? "0 " : matrix[i][j] + " ");
+                sb.append(matrix[i][j] == MAX ? "0 " : matrix[i][j] + " ");
             }
-            System.out.println();
+            sb.append("\n");
         }
+        System.out.println(sb);
     }
 }
