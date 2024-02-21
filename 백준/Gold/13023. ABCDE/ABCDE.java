@@ -1,53 +1,60 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
-    static int answer = 0;
-    static List<List<Integer>> two;
-    static int[] visited;
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int n = scanner.nextInt();
-        int m = scanner.nextInt();
-        two = new ArrayList<>(n);
+    static int answer;
+    static ArrayList<ArrayList<Integer>> graph;
+    static boolean[] visited;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+        graph = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            two.add(new ArrayList<>());
+            graph.add(new ArrayList<>());
         }
-
+        visited = new boolean[n];
         for (int i = 0; i < m; i++) {
-            int a = scanner.nextInt();
-            int b = scanner.nextInt();
-            two.get(a).add(b);
-            two.get(b).add(a);
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+
+            graph.get(a).add(b);
+            graph.get(b).add(a);
         }
 
         for (int i = 0; i < n; i++) {
-            visited = new int[n];
-            if (answer == 1) {
-                break;
-            } else {
-                dfs(i, 0);
+            if (!visited[i]) {
+                visited[i] = true;
+                DFS(0, i);
+                if (answer == 1) {
+                    break;
+                }
+                visited[i] = false;
             }
         }
 
         System.out.println(answer);
     }
 
-    static void dfs(int x, int depth) {
+    private static void DFS(int depth, int now) {
         if (depth == 4) {
             answer = 1;
             return;
         }
 
-        visited[x] = 1;
-        for (int i = 0; i < two.get(x).size(); i++) {
-            if (visited[two.get(x).get(i)] == 0) {
-                dfs(two.get(x).get(i), depth + 1);
-                if (answer == 1) return;
+        ArrayList<Integer> list = graph.get(now);
+        for (int i = 0; i < list.size(); i++) {
+            int target = list.get(i);
+            if (!visited[target]) {
+                visited[target] = true;
+                DFS(depth + 1, list.get(i));
+                visited[target] = false;
             }
         }
-        visited[x] = 0;
     }
 }
