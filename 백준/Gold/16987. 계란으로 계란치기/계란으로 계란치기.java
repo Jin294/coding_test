@@ -36,9 +36,8 @@ public class Main {
 
     public static void crackEggs(int now, int crackedEgg) {
         // now가 없을 때 == 마지막 계란이 now - 1(제일 오른쪽) 일 때
-        // 깨뜨린 계란 계산
         if (now == n) {
-            answer = Math.max(answer, countCracked());
+            answer = Math.max(answer, crackedEgg);
             return;
         }
 
@@ -55,45 +54,40 @@ public class Main {
                 }
 
                 if (!cracked[i]) { // 내려칠 계란이 깨지지 않았다면
-                    eggs[now].durability -= eggs[i].weight;
-                    if (eggs[now].durability <= 0) {
-                        crackedEgg++;
-                        cracked[now] = true;
-                    }
-
-                    eggs[i].durability -= eggs[now].weight;
-                    if (eggs[i].durability <= 0) {
-                        crackedEgg++;
-                        cracked[i] = true;
-                    }
+                    crackedEgg = hitEgg(now, i, crackedEgg);
+                    crackedEgg = hitEgg(i, now, crackedEgg);
 
                     // 손에 든 now의 다음계란
                     crackEggs(now + 1, crackedEgg);
 
-                    eggs[now].durability += eggs[i].weight;
-                    if (cracked[now]) {
-                        crackedEgg--;
-                        cracked[now] = false;
-                    }
-
-                    eggs[i].durability += eggs[now].weight;
-                    if (cracked[i]) {
-                        crackedEgg--;
-                        cracked[i] = false;
-                    }
+                    crackedEgg = recoverEgg(now, i, crackedEgg);
+                    crackedEgg = recoverEgg(i, now, crackedEgg);
                 }
             }
         }
     }
 
-    public static int countCracked() {
-        int count = 0;
-        for (int i = 0; i < n; i++) {
-            if (cracked[i]) {
-                count++;
-            }
+    // 계란 깨기
+    public static int hitEgg(int handEgg, int targetEgg, int crackedEgg) {
+        eggs[handEgg].durability -= eggs[targetEgg].weight;
+
+        if (eggs[handEgg].durability <= 0) {
+            crackedEgg++;
+            cracked[handEgg] = true;
+        }
+        
+        return crackedEgg;
+    }
+
+    // 깬 계란 원상복구
+    public static int recoverEgg(int handEgg, int targetEgg, int crackedEgg) {
+        eggs[handEgg].durability += eggs[targetEgg].weight;
+
+        if (cracked[handEgg]) {
+            crackedEgg--;
+            cracked[handEgg] = false;
         }
 
-        return count;
+        return crackedEgg;
     }
 }
