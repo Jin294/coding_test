@@ -1,36 +1,29 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-
 
 public class Main {
-    static final int INF = (int) Math.pow(10, 6);
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        int[] arr = new int[n + 1];
-        Arrays.fill(arr, INF);
-        arr[n] = 0;
+        int[] dp = new int[n + 1];
 
-        for (int i = n; i > 1; i--) {
-            if (arr[i] != INF)  {
-                if (i % 3 == 0) {
-                    add(arr, i, i / 3);
-                }
+        for (int i = 2; i <= n; i++) {
+            dp[i] = dp[i - 1] + 1;
 
-                if (i % 2 == 0) {
-                    add(arr, i, i / 2);
-                }
+            if (i % 3 == 0) {
+                add(dp, i, i / 3);
+            }
 
-                add(arr, i, i - 1);
+            if (i % 2 == 0) {
+                add(dp, i, i / 2);
             }
         }
 
-        System.out.println(arr[1]);
+        System.out.println(dp[n]);
     }
 
-    public static void add(int[] arr, int first, int second) {
-        arr[second] = Math.min(arr[second], arr[first] + 1);
+    public static void add(int[] arr, int now, int next) {
+        arr[now] = Math.min(arr[now], arr[next] + 1);
     }
 }
