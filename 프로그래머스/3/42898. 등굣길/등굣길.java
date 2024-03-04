@@ -17,13 +17,8 @@ class Solution {
                     continue;
                 }
                 
-                if (i != 1) {
-                    dp[i][j] += dp[i - 1][j] % MOD;
-                }
-                
-                if (j != 1) {
-                    dp[i][j] += dp[i][j - 1] % MOD;
-                }
+                dp[i][j] += dp[i - 1][j] % MOD;
+                dp[i][j] += dp[i][j - 1] % MOD;
             }
         }
         
