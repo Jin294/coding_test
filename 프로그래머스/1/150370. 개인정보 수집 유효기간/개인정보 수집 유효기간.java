@@ -14,9 +14,6 @@ class Solution {
         for (int i = 0; i < privacies.length; i++) {
             String[] li = privacies[i].split(" ");
             
-            String nowDate = li[0];
-            char nowKind = li[1].charAt(0);
-            
             int now = getDays(li[0]) + map.get(li[1].charAt(0)) * 28;
             
             if (td >= now) {
