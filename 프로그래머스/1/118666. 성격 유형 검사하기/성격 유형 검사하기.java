@@ -32,10 +32,6 @@ class Solution {
         int one = map.getOrDefault(first, 0);
         int two = map.getOrDefault(second, 0);
         
-        if (one == two) {
-            return first;
-        }
-        
         return one < two ? second : first;
     }
 }
