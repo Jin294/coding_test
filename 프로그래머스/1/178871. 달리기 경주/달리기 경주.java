@@ -20,12 +20,15 @@ class Solution {
         int calledRank = rank.get(calledPlayer);
         
         if (calledRank != 0) {
+            // frontRank : 이름이 불린 선수의 바로 앞선수
             int frontRank = calledRank - 1;
             String tmp = new String(players[frontRank]);
             
+            // 두 선수의 등수를 조정한다.
             rank.put(players[calledRank], calledRank - 1);
-            rank.put(players[frontRank], frontRank + 1);
+            rank.put(players[frontRank], calledRank);
             
+            // 두 선수의 위치를 바꾼다.
             players[frontRank] = players[calledRank];
             players[calledRank] = tmp;
         }
