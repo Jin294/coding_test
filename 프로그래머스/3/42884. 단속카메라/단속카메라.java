@@ -2,25 +2,25 @@ import java.util.*;
 
 class Solution {
     public int solution(int[][] routes) {
-        // 진출지점 기준으로 오름차순 정렬
         Arrays.sort(routes, new Comparator<int[]>(){
-            @Override
+           @Override
             public int compare(int[] o1, int[] o2) {
                 return o1[1] - o2[1];
             }
         });
         
-        // 카메라 위치 초기화
-        int camera = -30_001;
-        int answer = 0;
+        int now = -30_000;
+        int cnt = 0;
         
         for (int[] route : routes) {
-            if (camera < route[0]) {
-                camera = route[1];
-                answer++;
+            // 진입지점은 현재보다 작을 때
+            // 진출지점은 현재보다 클 때
+            if (now < route[0] || route[1] < now) {
+                cnt++;
+                now = route[1];
             }
         }
         
-        return answer;
+        return cnt;
     }
 }
