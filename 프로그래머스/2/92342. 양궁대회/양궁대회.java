@@ -1,73 +1,81 @@
-import  java.util.*;
+import java.util.*;
 
 class Solution {
-    static final int LEN = 11;
-    static int maxDiff;
-    static int[] answer = {-1};
+    int diff, aSum, rSum;
+    int[] gRyan = new int[11];
     public int[] solution(int n, int[] info) {
-        int[] ryan = new int[LEN];
-        DFS(0, n, info, ryan);
-
-        return answer;
+        makeRyanArray(n, 0, info, new int[11]);
+        
+        if (diff == 0) {
+            return new int[]{-1};
+        }
+        
+        return gRyan;
     }
     
-    public boolean isRyanBetter(int[] ryan) {
-        for (int i = LEN - 1; i >= 0; i--) {
-            if (answer[i] > ryan[i]) {
-                return false;
-            } else if (answer[i] < ryan[i]){
-                return true;
+    // n발의 화살을 라이언에게 분배하기
+    // 화살이 남아있을 때, 어피치보다 많으면 됨
+    public void makeRyanArray(int remain, int idx, int[] apeach, int[] ryan) {
+        // 꼭 모든 화살을 다 사용해야 한다.
+        // 화살을 다 사용했다면 점수계산
+        if (idx == 11) {
+            ryan[10] = remain;
+            calc(apeach, ryan);
+            
+            // 라이언 점수가 어피치보다 클 때
+            if (aSum < rSum && diff <= rSum - aSum) {
+                // 점수 차이가 더 커지게
+                if (diff < rSum - aSum) {
+                    diff = rSum - aSum;
+                    gRyan = ryan.clone();
+                } else if (diff == rSum - aSum) {
+                    // 점수 차이가 같다면
+                    if (getLower(ryan)) {
+                        gRyan = ryan.clone();
+                    }
+                }
             }
-        }
-
-        return false;
-    }
-
-    public void calcScore(int[] apeach, int[] ryan) {
-        int apeachScore = 0, ryanScore = 0;
-        for (int i = 0; i < LEN; i++) {
-            int score = 10 - i;
-            if (apeach[i] > ryan[i]) {
-                apeachScore += score;
-            } else if (apeach[i] < ryan[i]){
-                ryanScore += score;
-            }
-        }
-
-        int diff = ryanScore - apeachScore;
-
-        // 현재 차이값이 최대 차이값보다 같다면
-        // answer 배열이 가장 낮은 점수를 고려했는지 살펴봐야 한다.
-        if (diff > 0 && diff >= maxDiff) {
-            if (maxDiff == diff && !isRyanBetter(ryan)) {
-                return;
-            }
-            maxDiff = diff;
-            answer = Arrays.copyOf(ryan, LEN);
-        }
-    }
-
-    public void DFS(int idx, int arrows, int[] apeach, int[] ryan) {
-        // 인덱스 끝까지 도달했을 때, 또는 화살이 다 떨어졌을 때
-        if (idx == LEN || arrows == 0) {
-            // 남은 화살은 모두 0점 과녁에 몰아준다
-            ryan[LEN - 1] += arrows;
-            calcScore(apeach, ryan);
-
-            // 0점에 몰아준 화살 복구
-            ryan[LEN - 1] -= arrows;
+            
+            ryan[10] = 0;
             return;
         }
-
-        // 해당 영역에 화살을 쏘자
-        if (apeach[idx] < arrows) {
-            // 어피치보다 많아야 해당 구역의 점수를 얻을 수 있음.
-            ryan[idx] += apeach[idx] + 1;
-            DFS(idx + 1, arrows - (apeach[idx] + 1), apeach, ryan);
-            ryan[idx] -= apeach[idx] + 1;
+        
+        // 남아있는 화살이 어피치가 맞힌 화살보다 많거나 같다면
+        // 라이언이 맞힐 가치가 있음
+        if (remain > apeach[idx]) {
+            ryan[idx] = apeach[idx] + 1;
+            makeRyanArray(remain - ryan[idx], idx + 1, apeach, ryan);
+            ryan[idx] = 0;
         }
-
-        // 해당 영역에 화살을 쏘지 말자
-        DFS(idx + 1, arrows, apeach, ryan);
+        
+        // 라이언이 해당 칸을 맞히지 않았을 때
+        makeRyanArray(remain, idx + 1, apeach, ryan);
+    }
+    
+    public boolean getLower(int[] ryan) {
+        for (int i = 10; i >= 0; i--) {
+            if (gRyan[i] > 0 || ryan[i] > 0) {
+                if (gRyan[i] < ryan[i]) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    
+    public void calc(int[] apeach, int[] ryan) {
+        aSum = 0;
+        rSum = 0;
+        for (int i = 0; i < 11; i++) {
+            if (ryan[i] > apeach[i] && ryan[i] > 0) {
+                rSum += 10 - i;
+            } else if (ryan[i] < apeach[i] && apeach[i] > 0) {
+                aSum += 10 - i;
+            }
+        }
     }
 }
