@@ -4,8 +4,5 @@
 using namespace std;
 
 int solution(int a, int b) {
-    string one = to_string(a) + to_string(b);
-    string two = to_string(b) + to_string(a);
-
-    return max(stoi(one), stoi(two));
+    return max(stoi(to_string(a) + to_string(b)), stoi(to_string(b) + to_string(a)));
 }
