@@ -1,23 +1,17 @@
-#include <string>
 #include <vector>
 
 using namespace std;
 
 bool isArraySame(vector<int> &one, vector<int> &two) {
-    for (int i = 0; i < one.size(); i++) {
-        if (one[i] != two[i]) {
-            return false;
-        }
-    }
-    return true;
+    return one == two;
 }
 
 void calcVector(vector<int> &tmp) {
-    for (int i = 0; i < tmp.size(); i++) {
-        if (tmp[i] % 2 == 0 && tmp[i] > 50) {
-            tmp[i] /= 2;
-        } else if (tmp[i] % 2 == 1 && tmp[i] < 50)  {
-            tmp[i] = tmp[i] * 2 + 1;
+    for (int &value : tmp) {
+        if (value % 2 == 0 && value > 50) {
+            value /= 2;
+        } else if (value % 2 == 1 && value < 50)  {
+            value = value * 2 + 1;
         }
     }
 }
@@ -29,7 +23,7 @@ int solution(vector<int> arr) {
     calcVector(tmp);
     while (!isArraySame(arr, tmp)) {
         count++;
-        copy(tmp.begin(), tmp.end(), arr.begin());
+        arr = tmp;
         calcVector(tmp);
     }
 
