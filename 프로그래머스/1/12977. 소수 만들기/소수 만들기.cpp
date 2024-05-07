@@ -5,14 +5,18 @@ using namespace std;
 const int LEN = 3001;
 // 소수 여부 체크할 배열 만들기
 bool isPrime[LEN];
+
+// 3개의 선택된 숫자
 vector<int> selected;
 
+// 선택된 숫자들의 집합
 set<vector<int>> answer;
 
 // 조합 : 3개의 수를 뽑는다.
 void combination(int now, int sum, int idx, vector<int>& nums) {
     if (now == 3) {
         if (isPrime[sum]) {
+            // 단순히 합이 소수인게 아니라, 숫자 3개가 모두 달라야함
             answer.insert(selected);
         }
         return;
@@ -26,6 +30,9 @@ void combination(int now, int sum, int idx, vector<int>& nums) {
 }
 
 int solution(vector<int> nums) {
+    // 정렬 필수!
+    sort(nums.begin(), nums.end());
+    
     // isPrime을 true로 초기화한다
     fill(isPrime, isPrime + LEN, true);    
     
