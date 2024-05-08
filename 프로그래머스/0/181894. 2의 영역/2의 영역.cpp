@@ -1,37 +1,24 @@
-#include <vector>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 vector<int> solution(vector<int> arr) {
-    vector<int> answer;
     
     // 앞부분
-    int start = -1;
-    for (int i = 0; i < arr.size(); i++) {
-        if (arr[i] == 2) {
-            start = i;
-            break;
-        }
+    auto start = find(arr.begin(), arr.end(), 2);
+    
+    // start가 마지막 위칫값과 같다는 것은, 해당 데이터가 없다는것!
+    if (start == arr.end()) {
+        return {-1};
     }
     
-    if (start == -1) {
-        answer.push_back(-1);
-        return answer;
-    }
-    
-    // 뒷부분
-    int end = arr.size() - 1;
-    for (int i = end; i >= 0; i--) {
-        if (arr[i] == 2) {
-            end = i;
-            break;
-        }
-    }
+    // 뒷부분 : 역방향 반복자!!
+    auto end = find(arr.rbegin(), arr.rend(), 2);
     
     // 범위 내의 요소 추려내기
-    for (int i = start; i <= end; i++) {
-        answer.push_back(arr[i]);
-    }
+    // 왜 base()를 쓰냐?
+    // => end가 역방향 반복자라, 순방향 반복자로 바꿔주기위해!
+    vector<int> answer(start, end.base());
     
     return answer;
 }
