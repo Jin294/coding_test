@@ -3,9 +3,9 @@
 using namespace std;
 
 vector<int> solution(vector<int> arr) {
-    for (int i = 0; i < arr.size(); i++) {
-        if (arr[i] >= 50 && ((arr[i] & 1) == 0)) arr[i] /= 2;
-        else if (arr[i] < 50 && ((arr[i] & 1) == 1)) arr[i] *= 2;
+    for (auto& num : arr) {
+        if (num >= 50 && ((num & 1) == 0)) num /= 2;
+        else if (num < 50 && ((num & 1) == 1)) num *= 2;
     }
     
     return arr;
