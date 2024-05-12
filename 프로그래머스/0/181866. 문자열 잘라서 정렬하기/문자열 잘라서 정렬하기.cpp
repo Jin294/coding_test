@@ -7,13 +7,16 @@ vector<string> solution(string myString) {
     
     auto start = 0;
     auto end = myString.find("x");
+    string token;
     
     while (end != string::npos) {
-        if (myString.substr(start, end - start).size() > 0) answer.push_back(myString.substr(start, end - start));
+        token = myString.substr(start, end - start);
+        if (token != "") answer.push_back(token);
         start = end + 1;
         end = end = myString.find("x", start);
     }
-    if (myString.substr(start).size() > 0) answer.push_back(myString.substr(start));
+    token = myString.substr(start);
+    if (token != "") answer.push_back(token);
     
     sort(answer.begin(), answer.end());
     
