@@ -3,8 +3,11 @@
 using namespace std;
 
 int solution(vector<string> strArr) {
-    vector<int> cnt(100'001);
-    fill(cnt.begin(), cnt.begin() + 100001, 0);
-    for (string str : strArr) cnt[str.size()]++;
-    return *max_element(cnt.begin(), cnt.end());
+    map<int, int> cnt;
+    for (string& str : strArr) cnt[str.size()]++;
+    
+    int maxCnt = 0;
+    for (auto pair : cnt) if (pair.second > maxCnt) maxCnt = pair.second;
+
+    return maxCnt;
 }
