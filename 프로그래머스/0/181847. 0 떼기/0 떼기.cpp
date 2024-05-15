@@ -3,11 +3,6 @@
 using namespace std;
 
 string solution(string n_str) {
-    int idx = -1;
-    for (int i = 0; i < n_str.size(); i++) {
-        if (n_str[i] == '0') idx = i;
-        else break;
-    }
-    
-    return idx == -1 ? n_str : n_str.substr(idx + 1);
+    // 문자열을 숫자로 바꾸었다가 다시 문자열로
+    return to_string(stoi(n_str));
 }
