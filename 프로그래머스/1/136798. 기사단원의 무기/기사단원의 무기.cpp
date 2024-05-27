@@ -4,10 +4,12 @@ using namespace std;
 
 int getDivisorSize(int num) {
     int cnt = 0;
-    int sqrtN = (int) sqrt(num);
-    for (int i = 1; i < sqrt(num); i++) if (num % i == 0) cnt += 2;
-    
-    if (sqrtN * sqrtN == num) cnt++;
+    for (int i = 1; i * i <= num; i++) {
+        if (num % i > 0) continue;
+        
+        if (i * i == num) cnt++;
+        else cnt += 2;
+    }
     
     return cnt;
 }
