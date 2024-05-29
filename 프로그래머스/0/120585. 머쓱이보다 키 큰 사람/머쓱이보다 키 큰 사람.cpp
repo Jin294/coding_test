@@ -1,11 +1,7 @@
-#include <vector>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 int solution(vector<int> array, int height) {
-    int answer = 0;
-    
-    for (int num : array) if (num > height) answer++;
-    
-    return answer;
+    return count_if(array.begin(), array.end(), [&](int x){ return x > height; });
 }
