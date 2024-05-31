@@ -10,13 +10,13 @@ int solution(vector<int> sides) {
     
     // 제일 긴것이 b라고 할 때
     // a + c > b
-    // -> c > b - a
+    // b가 제일 기니까 b보다 작거나 같아야
     for (int c = b; c > 0; c--) {
         if (a + c > b) s.insert(c);
     }
     
     // c가 제일 길 때
-    // a + b > c
+    // a + b > c && c가 제일 기니까 b보다 커야한다.
     for (int c = b; c < a + b; c++) {
         s.insert(c);
     }
