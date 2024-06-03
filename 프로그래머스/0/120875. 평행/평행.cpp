@@ -2,26 +2,44 @@
 
 using namespace std;
 
+vector<int> nums = {0, 1, 2, 3};
+vector<vector<int>> combs;
+
+void makePermutation(int n, int r, int depth, vector<int> b) {
+    if (r == depth) {
+        combs.push_back(b);
+        return;
+    }
+    
+    for (int i = depth; i < n; i++) {
+        b.push_back(nums[i]);
+        makePermutation(n, r, depth + 1, b);
+        b.pop_back();
+    }
+}
+
 int solution(vector<vector<int>> dots) {
-    vector<int> p1 = dots[0];
-    vector<int> p2 = dots[1];
-    vector<int> p3 = dots[2];
-    vector<int> p4 = dots[3];
+    // 4개 중에 2개 뽑는 조합(순서 x)
+    vector<int> b;
+    makePermutation(4, 4, 0, b);
     
-    double slope1 = abs(p2[1] - p1[1]) * 1.0 / abs(p2[0] - p1[0]);
-    double slope2 = abs(p4[1] - p3[1]) * 1.0 / abs(p4[0] - p3[0]);
+    int answer = 0;
 
-    if (slope1 == slope2) return 1;
+    for (auto p : combs) {
+        for (auto num : p) {
+            cout << num << " ";
+        }
+        cout << endl;
+    }
     
-    double slope3 = abs(p3[1] - p1[1]) * 1.0 / abs(p3[0] - p1[0]);
-    double slope4 = abs(p4[1] - p2[1]) * 1.0 / abs(p4[0] - p2[0]);
-
-    if (slope3 == slope4) return 1;
+    // 조합 저장한 순서대로 기울기 비교
+//     for (auto p : combs) {
+//         vector<int> first = dots[p[0]];
+//         vector<int> second = dots[p[1]];
+        
+//         cout << first[0] << " " << first[1] << endl;
+//         cout << second[0] << " " << second[1] << endl;
+//     }
     
-    double slope5 = abs(p4[1] - p1[1]) * 1.0 / abs(p4[0] - p1[0]);
-    double slope6 = abs(p3[1] - p2[1]) * 1.0 / abs(p3[0] - p2[0]);
-
-    if (slope5 == slope6) return 1;
-    
-    return 0;
+    return answer;
 }
