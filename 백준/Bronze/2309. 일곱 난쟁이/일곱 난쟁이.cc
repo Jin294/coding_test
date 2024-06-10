@@ -1,35 +1,41 @@
 #include <bits/stdc++.h>
+
 using namespace std;
-int a[9], sum;
-vector<int> v;
-pair<int, int> ret;
-void solve(){
-    for (int i = 0; i < 9; ++i) {
-        for (int j = 0; j < i; ++j) {
-            if (sum - a[i] - a[j] == 100) {
-                ret = {i, j};
-                return;
-            }
-        }
-    }
-}
-int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    for (int i = 0; i < 9; ++i) {
-        cin >> a[i]; sum += a[i];
-    }
-    // 일곱 난쟁이 판별
-    solve();
-    // 일곱 난쟁이가 아닌것들은 push하지 않음
-    for (int i = 0; i < 9; ++i) {
-        if (ret.first == i || ret.second == i) continue;
-        v.push_back(a[i]);
-    }
-    // 오름차순 정렬
-    sort(v.begin(), v.end());
-    // 한 칸씩 띄워서 출력
-    for (int i : v) cout << i << " ";
-    return 0;
+
+int main() {
+	vector<int> height(9, 0);
+	vector<bool> visited(9, false);
+	
+	int num;
+	for (int i = 0; i < 9; i++) {
+		cin >> height[i];
+	}
+	sort(height.begin(), height.end());
+	int sum = accumulate(height.begin(), height.end(), 0);
+
+    bool flag = false;
+	for (int i = 0; i < 9; i++) {
+		sum -= height[i];
+		for (int j = i + 1; j < 9; j++) {
+			sum -= height[j];
+
+			if (sum == 100) {
+				visited[i] = true;
+				visited[j] = true;
+				flag = true;
+			}
+			
+            if (flag) break;
+			sum += height[j];
+		}
+
+        if (flag) break;
+		sum += height[i];
+	}
+	
+	for (int i = 0; i < 9; i++) {
+		if (!visited[i]) cout << height[i] << "\n";
+	}
+
+	return 0;
 }
