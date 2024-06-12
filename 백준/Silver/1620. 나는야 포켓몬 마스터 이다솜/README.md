@@ -4,11 +4,15 @@
 
 ### 성능 요약
 
-메모리: 25528 KB, 시간: 208 ms
+메모리: 23528 KB, 시간: 156 ms
 
 ### 분류
 
 자료 구조, 해시를 사용한 집합과 맵
+
+### 제출 일자
+
+2024년 6월 13일 08:52:00
 
 ### 문제 설명
 
@@ -100,17 +104,17 @@
 
 <p><img alt="" src="https://www.acmicpc.net/upload/201004/pc.PNG" style="height:183px; width:274px"></p>
 
-<p><img alt="" src="" style="height:182px; width:274px"></p>
+<p><img alt="" src="https://www.acmicpc.net/upload/201004/pd.PNG" style="height:182px; width:274px"></p>
 
 <p><img alt="" src="https://www.acmicpc.net/upload/201004/pe.PNG" style="height:183px; width:274px"></p>
 
-<p><img alt="" src="" style="height:183px; width:274px"></p>
+<p><img alt="" src="https://www.acmicpc.net/upload/201004/pf.PNG" style="height:183px; width:274px"></p>
 
-<p><img alt="" src="" style="height:181px; width:274px"></p>
+<p><img alt="" src="https://www.acmicpc.net/upload/201004/pg.PNG" style="height:181px; width:274px"></p>
 
-<p><img alt="" src="" style="height:184px; width:274px"></p>
+<p><img alt="" src="https://www.acmicpc.net/upload/201004/ph.PNG" style="height:184px; width:274px"></p>
 
-<p><img alt="" src="" style="height:184px; width:274px"></p>
+<p><img alt="" src="https://www.acmicpc.net/upload/201004/pi.PNG" style="height:184px; width:274px"></p>
 
 <p>이다솜 : 휴... 이겼다.</p>
 
