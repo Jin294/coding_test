@@ -1,20 +1,17 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Objects;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String str;
+    public static void main(String[] args) throws IOException{
+        BufferedReader br =  new BufferedReader(new InputStreamReader(System.in));
+        String s;
+        while ((s = br.readLine()) !=  null) {
+            int n = Integer.parseInt(s);
 
-        while ((str = br.readLine()) != null) {
-            int n = Integer.parseInt(str);
-            int build = 1;
+            long num = 1;
             int len = 1;
-
-            while (build % n != 0) {
-                build = (build * 10 + 1) % n;
+            while (num % n != 0) {
+                num = (num * 10 + 1) % n;
                 len++;
             }
 
