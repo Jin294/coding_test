@@ -4,33 +4,26 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        long a = Integer.parseInt(st.nextToken());
-        long b = Integer.parseInt(st.nextToken());
-        long c = Integer.parseInt(st.nextToken());
+    static int a, b, c;
+    
+    public static long divideAndConquer(int count) {
+        if (count == 0) return 1;
+        else if (count == 1) return a;
 
-        System.out.println(solution(a, b, c));
+        long tmp = divideAndConquer(count / 2) % c;
+        long ret = tmp * tmp % c;
+
+        return count % 2 == 0 ? ret : ret * a % c;
     }
 
-    private static long solution(long base, long times, long modulus) {
-        if (modulus == 1) {
-            return 0;
+    public static void main(String[] args) throws IOException {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            a = Integer.parseInt(st.nextToken());
+            b = Integer.parseInt(st.nextToken());
+            c = Integer.parseInt(st.nextToken());
+
+            System.out.println(divideAndConquer(b) % c);
         }
-
-        long result = 1L;
-
-        base %= modulus;
-
-        while (times > 0) {
-            if (times % 2 == 1) {
-                result = (result * base) % modulus;
-            }
-            times = times >> 1;
-            base = (base * base) % modulus;
-        }
-
-        return result;
     }
 }
